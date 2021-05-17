@@ -1,11 +1,21 @@
-(function_definition (block) @fold)
-(class_definition (block) @fold)
+(decorated_definition [(function_definition) (class_definition)]) @fold
+(
+ [
+  (function_definition)
+  (class_definition)
+  (import_from_statement)
+  (import_statement)
+ ] [
+  (function_definition)
+  (class_definition)
+ ] @fold
+)
 
-(while_statement (block) @fold)
-(for_statement (block) @fold)
-(if_statement (block) @fold)
-(with_statement (block) @fold)
-(try_statement (block) @fold)
+(while_statement (block)) @fold
+(for_statement (block)) @fold
+(if_statement (block)) @fold
+(with_statement (block)) @fold
+(try_statement (block)) @fold
 
 [
   (import_from_statement)
