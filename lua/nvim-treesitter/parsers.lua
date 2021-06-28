@@ -54,14 +54,41 @@ list.clojure = {
   maintainers = {"@sogaiu"},
 }
 
+list.commonlisp = {
+  install_info = {
+    url = "https://github.com/theHamsta/tree-sitter-commonlisp",
+    files = { "src/parser.c" },
+    generate_requires_npm = true,
+  },
+  filetype = 'lisp',
+  maintainers = {"@theHamsta"},
+}
+
 list.cpp = {
   install_info = {
     url = "https://github.com/tree-sitter/tree-sitter-cpp",
     files = { "src/parser.c", "src/scanner.cc" },
     generate_requires_npm = true,
   },
-  used_by = { "cuda" },
   maintainers = {"@theHamsta"},
+}
+
+list.cuda = {
+  install_info = {
+    url = "https://github.com/theHamsta/tree-sitter-cuda",
+    files = {"src/parser.c", "src/scanner.cc"},
+    generate_requires_npm = true,
+  },
+  maintainers = {"@theHamsta"},
+}
+
+list.dockerfile = {
+  install_info = {
+    url = "https://github.com/camdencheek/tree-sitter-dockerfile",
+    branch = "main",
+    files = { "src/parser.c" },
+  },
+  maintainers = {"@camdencheek"},
 }
 
 list.rust = {
@@ -206,9 +233,10 @@ list.css = {
 
 list.scss = {
   install_info = {
-    url = "https://github.com/elianiva/tree-sitter-scss",
+    url = "https://github.com/serenadeai/tree-sitter-scss",
     files = { "src/parser.c", "src/scanner.c" }
   },
+  maintainers = {"@elianiva"},
 }
 
 list.erlang = {
@@ -218,6 +246,15 @@ list.erlang = {
     branch = "main",
   },
   maintainers = { '@ostera' },
+}
+
+list.elixir = {
+  install_info = {
+    url = "https://github.com/ananthakumaran/tree-sitter-elixir",
+    files =  { "src/parser.c", "src/scanner.cc" },
+    requires_generate_from_grammar  = true,
+  },
+  maintainers = { '@nifoc' },
 }
 
 list.ocaml = {
@@ -262,7 +299,7 @@ list.c_sharp = {
     files = { "src/parser.c", "src/scanner.c" },
   },
   filetype = 'cs',
-  maintainers = {'@svermeulen'},
+  maintainers = {'@Luxed'},
 }
 
 list.typescript = {
@@ -299,7 +336,6 @@ list.supercollider = {
     url = "https://github.com/madskjeldgaard/tree-sitter-supercollider",
     files = {"src/parser.c", "src/scanner.c"},
     branch = "main",
-    requires_generate_from_grammar  = true,
   },
   maintainers = {"@madskjeldgaard"},
   filetype = "supercollider",
@@ -562,7 +598,6 @@ list.fortran = {
   install_info = {
     url = "https://github.com/stadelmanma/tree-sitter-fortran",
     files = { "src/parser.c", "src/scanner.cc", },
-    requires_generate_from_grammar = true,
   },
 }
 
@@ -575,7 +610,7 @@ function M.ft_to_lang(ft)
 end
 
 function M.available_parsers()
-  if vim.fn.executable('tree-sitter') == 1 then
+  if vim.fn.executable('tree-sitter') == 1 and vim.fn.executable('node') == 1 then
     return vim.tbl_keys(M.list)
   else
     return vim.tbl_filter(function(p) return not M.list[p].install_info.requires_generate_from_grammar end,
@@ -584,7 +619,7 @@ function M.available_parsers()
 end
 
 function M.maintained_parsers()
-  local has_tree_sitter_cli = vim.fn.executable('tree-sitter') == 1
+  local has_tree_sitter_cli = vim.fn.executable('tree-sitter') == 1 and vim.fn.executable('node') == 1
   return vim.tbl_filter(function(lang)
     return M.list[lang].maintainers
            and (has_tree_sitter_cli or not M.list[lang].install_info.requires_generate_from_grammar) end,
